@@ -596,25 +596,50 @@ describe('SubtleCrypto', () => {
     })
 
     describe('with valid arguments', () => {
-      let promise, error
+      describe('passing the algorithm as an object', () => {
+        let promise, error
 
-      beforeEach(() => {
-        let algorithm = { name: 'SHA-256' }
-        promise = crypto.subtle.digest(algorithm, new Buffer('whatever'))
-        promise.then(digest => result = digest)
-        promise.catch(err => error = err)
+        beforeEach(() => {
+          let algorithm = { name: 'SHA-256' }
+          promise = crypto.subtle.digest(algorithm, new Buffer('whatever'))
+          promise.then(digest => result = digest)
+          promise.catch(err => error = err)
+        })
+
+        it('should return a promise', () => {
+          promise.should.be.instanceof(Promise)
+        })
+
+        it('should resolve an ArrayBuffer', () => {
+          result.should.be.instanceof(ArrayBuffer)
+        })
+
+        it('should not reject the promise', () => {
+          expect(error).to.be.undefined
+        })
       })
 
-      it('should return a promise', () => {
-        promise.should.be.instanceof(Promise)
-      })
+      describe('passing the algorithm as a string', () => {
+        let promise, error
 
-      it('should resolve an ArrayBuffer', () => {
-        result.should.be.instanceof(ArrayBuffer)
-      })
+        beforeEach(() => {
+          let algorithm = 'SHA-256'
+          promise = crypto.subtle.digest(algorithm, new Buffer('whatever'))
+          promise.then(digest => result = digest)
+          promise.catch(err => error = err)
+        })
 
-      it('should not reject the promise', () => {
-        expect(error).to.be.undefined
+        it('should return a promise', () => {
+          promise.should.be.instanceof(Promise)
+        })
+
+        it('should resolve an ArrayBuffer', () => {
+          result.should.be.instanceof(ArrayBuffer)
+        })
+
+        it('should not reject the promise', () => {
+          expect(error).to.be.undefined
+        })
       })
     })
   })

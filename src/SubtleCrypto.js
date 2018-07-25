@@ -176,7 +176,7 @@ class SubtleCrypto {
 
     return new Promise((resolve, reject) => {
       try {
-        let result = normalizedAlgorithm.digest(algorithm, data)
+        let result = normalizedAlgorithm.digest(normalizedAlgorithm, data)
         return resolve(result)
       } catch (error) {
         return reject(error)
